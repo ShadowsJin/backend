@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str
 
     FASTAPI_PORT: int
+    FRONTEND_PORT: int
 
     @property
     def POSTGRES_URL(self):
