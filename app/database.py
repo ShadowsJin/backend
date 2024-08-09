@@ -1,6 +1,8 @@
-from sqlalchemy.ext.asyncio import create_async_engine
+from typing import Any
+
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from app.config import settings
 
@@ -9,4 +11,6 @@ async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 
 class Base(DeclarativeBase):
-    pass
+    type_annotation_map = {
+        dict[str, Any]: JSONB
+    }
