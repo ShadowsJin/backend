@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
+from app.routers.quizes import router as quizes_router
+from app.routers.users import router as users_router
 
 app = FastAPI()
 app.add_middleware(
@@ -12,7 +14,5 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+for router in [users_router, quizes_router]:
+    app.include_router(router)
