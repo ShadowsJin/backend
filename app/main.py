@@ -5,7 +5,7 @@ from app.config import settings
 from app.routers.quizes import router as quizes_router
 from app.routers.users import router as users_router
 
-app = FastAPI()
+app = FastAPI(root_path='/api')
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[f'http://localhost:{settings.FRONTEND_PORT}'],
