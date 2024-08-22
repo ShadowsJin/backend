@@ -7,6 +7,6 @@ class SLoginUser(BaseModel):
 
 
 class SFullUser(BaseModel):
-    name: str
+    fullname: str
     email: EmailStr
     password: str

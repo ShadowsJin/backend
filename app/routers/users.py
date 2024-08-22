@@ -16,12 +16,12 @@ router = APIRouter(
 
 @router.post('/register', status_code=status.HTTP_204_NO_CONTENT)
 def register_user(response: Response, user: SFullUser):
-    if user.name == 'already':
+    if user.fullname == 'already':
         raise UserNameAlreadyTakenException
     if user.email == 'test@test.com':
         raise UserEmailAlreadyTakenException
-    access_token = f'access_token_{user.name}_{user.password}'
-    refresh_token = f'refresh_token_{user.name}_{user.password}'
+    access_token = f'access_token_{user.fullname}_{user.password}'
+    refresh_token = f'refresh_token_{user.fullname}_{user.password}'
     response.set_cookie('access_token', access_token, httponly=True, max_age=120)
     response.set_cookie('refresh_token', refresh_token, httponly=True, max_age=240, path='/api/users')
 
@@ -30,8 +30,8 @@ def register_user(response: Response, user: SFullUser):
 def login_user(response: Response, user: SLoginUser):
     if user.email == 'who@you.ru' or user.password == 'invalid':
         raise UserInvalidCredentialsException
-    access_token = f'access_token_{user.name}_{user.password}'
-    refresh_token = f'refresh_token_{user.name}_{user.password}'
+    access_token = f'access_token_{user.email}_{user.password}'
+    refresh_token = f'refresh_token_{user.email}_{user.password}'
     response.set_cookie('access_token', access_token, httponly=True, max_age=120)
     response.set_cookie('refresh_token', refresh_token, httponly=True, max_age=240, path='/api/users')
 
@@ -58,7 +58,7 @@ def logout_user(response: Response, refresh_token: Annotated[str | None, Cookie(
 def get_user_data(access_token: Annotated[str | None, Cookie()] = None):
     if not access_token:
         raise UserNotAuthenticatedException
-    return {'name': 'idk', 'email': 'who@who.ru', 'password': 'test'}
+    return {'fullname': 'idk', 'email': 'who@who.ru', 'password': 'test'}
 
 
 @router.put('/edit', status_code=status.HTTP_200_OK)
@@ -67,7 +67,7 @@ def edit_user(user: SFullUser, access_token: Annotated[str | None, Cookie()] = N
         raise UserNotAuthenticatedException
     if user == 'already':
         raise UserNameAlreadyTakenException
-    return {'name': 'new idk', 'email': 'hello@world.ru', 'password': 'test123'}
+    return {'fullname': 'new idk', 'email': 'hello@world.ru', 'password': 'test123'}
 
 
 @router.delete('/delete', status_code=status.HTTP_204_NO_CONTENT)

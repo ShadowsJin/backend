@@ -11,7 +11,7 @@ from app.models.base import MAX_TEXT_LENGTH, UUIDMixin, unique_name
 class User(UUIDMixin, Base):
     __tablename__ = 'users'
 
-    name: Mapped[unique_name]
+    fullname: Mapped[unique_name]
     email: Mapped[unique_name]
     password: Mapped[str] = mapped_column(String(MAX_TEXT_LENGTH))
     registered_at: Mapped[datetime] = mapped_column(
