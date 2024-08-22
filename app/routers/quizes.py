@@ -14,8 +14,8 @@ router = APIRouter(
 
 
 @router.get('/created', status_code=status.HTTP_200_OK)
-def get_created_quizes(auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def get_created_quizes(access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
     return [
         {'id': '32da9f82-aece-4f9f-b70b-99adc6389798', 'name': 'Тест1'},
@@ -24,8 +24,8 @@ def get_created_quizes(auth_token: Annotated[str | None, Cookie()] = None):
 
 
 @router.get('/completed', status_code=status.HTTP_200_OK)
-def get_completed_quizes(auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def get_completed_quizes(access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
     return [
         {'id': '42d9fcbc-4732-4662-80d5-f8f42b874ffc', 'name': 'Тест3', 'correct': 5, 'total': 5},
@@ -34,15 +34,15 @@ def get_completed_quizes(auth_token: Annotated[str | None, Cookie()] = None):
 
 
 @router.post('/new', status_code=status.HTTP_201_CREATED)
-def create_quiz(quiz: SQuiz, auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def create_quiz(quiz: SQuiz, access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
     return {'id': 'e2ae7f46-660f-47f4-be38-d8998fb9bf21'}
 
 
 @router.get('/{quiz_id}', status_code=status.HTTP_200_OK)
-def get_quiz(quiz_id: UUID, auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def get_quiz(quiz_id: UUID, access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
     if quiz_id == 'a326a03c-68d3-4b27-9fcc-3350e9251846':
         raise QuizNotFoundException
@@ -50,8 +50,8 @@ def get_quiz(quiz_id: UUID, auth_token: Annotated[str | None, Cookie()] = None):
 
 
 @router.get('/{quiz_id}/{question_no}', status_code=status.HTTP_200_OK)
-def get_quiz_question(quiz_id: UUID, question_no: int, auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def get_quiz_question(quiz_id: UUID, question_no: int, access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
     if quiz_id == 'a326a03c-68d3-4b27-9fcc-3350e9251846':
         raise QuizNotFoundException
@@ -69,8 +69,8 @@ def get_quiz_question(quiz_id: UUID, question_no: int, auth_token: Annotated[str
 
 
 @router.post('/send_answer/{quiz_id}/{question_no}', status_code=status.HTTP_204_NO_CONTENT)
-def send_answer(quiz_id: UUID, question_no: int, answer: str | UUID, auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def send_answer(quiz_id: UUID, question_no: int, answer: str | UUID, access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
     if quiz_id == 'a326a03c-68d3-4b27-9fcc-3350e9251846':
         raise QuizNotFoundException
@@ -79,8 +79,8 @@ def send_answer(quiz_id: UUID, question_no: int, answer: str | UUID, auth_token:
 
 
 @router.get('/finish_test/{quiz_id}', status_code=status.HTTP_200_OK)
-def finish_test(quiz_id: UUID, auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def finish_test(quiz_id: UUID, access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
     if quiz_id == 'a326a03c-68d3-4b27-9fcc-3350e9251846':
         raise QuizNotFoundException
@@ -88,20 +88,20 @@ def finish_test(quiz_id: UUID, auth_token: Annotated[str | None, Cookie()] = Non
 
 
 @router.put('/{quiz_id}', status_code=status.HTTP_204_NO_CONTENT)
-def edit_quiz(quiz_id: UUID, quiz: SQuiz, auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def edit_quiz(quiz_id: UUID, quiz: SQuiz, access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
-    if auth_token == 'token_123_123':
+    if access_token == 'token_123_123':
         raise QuizOwnerException
     if quiz_id == 'a326a03c-68d3-4b27-9fcc-3350e9251846':
         raise QuizNotFoundException
 
 
 @router.delete('/{quiz_id}', status_code=status.HTTP_204_NO_CONTENT)
-def delete_quiz(quiz_id: UUID, auth_token: Annotated[str | None, Cookie()] = None):
-    if not auth_token:
+def delete_quiz(quiz_id: UUID, access_token: Annotated[str | None, Cookie()] = None):
+    if not access_token:
         raise UserNotAuthenticatedException
-    if auth_token == 'token_123_123':
+    if access_token == 'token_123_123':
         raise QuizOwnerException
     if quiz_id == 'a326a03c-68d3-4b27-9fcc-3350e9251846':
         raise QuizNotFoundException
