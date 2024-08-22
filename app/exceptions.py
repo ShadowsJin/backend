@@ -14,6 +14,11 @@ class UserNameAlreadyTakenException(BaseException):
     detail = 'this user name is already taken'
 
 
+class UserEmailAlreadyTakenException(BaseException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = 'this email address is already taken'
+
+
 class UserInvalidCredentialsException(BaseException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = 'invalid name or password'

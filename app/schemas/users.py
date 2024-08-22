@@ -1,11 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
-class SAuthUser(BaseModel):
-    name: str
+class SLoginUser(BaseModel):
+    email: EmailStr
     password: str
 
 
-class SEditUser(BaseModel):
+class SFullUser(BaseModel):
     name: str
+    email: EmailStr
     password: str

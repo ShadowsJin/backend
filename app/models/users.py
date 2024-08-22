@@ -12,6 +12,7 @@ class User(UUIDMixin, Base):
     __tablename__ = 'users'
 
     name: Mapped[unique_name]
+    email: Mapped[unique_name]
     password: Mapped[str] = mapped_column(String(MAX_TEXT_LENGTH))
     registered_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
