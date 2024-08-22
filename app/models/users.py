@@ -16,6 +16,5 @@ class User(UUIDMixin, Base):
     registered_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
-    is_teacher: Mapped[bool]
 
     created_quizes: Mapped[list['Quiz']] = relationship(back_populates='owner')

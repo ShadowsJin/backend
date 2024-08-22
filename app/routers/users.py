@@ -55,7 +55,7 @@ def logout_user(response: Response, refresh_token: Annotated[str | None, Cookie(
 def get_user_data(access_token: Annotated[str | None, Cookie()] = None):
     if not access_token:
         raise UserNotAuthenticatedException
-    return {'name': 'idk', 'password': 'test', 'is_teacher': True}
+    return {'name': 'idk', 'password': 'test'}
 
 
 @router.put('/edit', status_code=status.HTTP_200_OK)
@@ -64,7 +64,7 @@ def edit_user(user: SEditUser, access_token: Annotated[str | None, Cookie()] = N
         raise UserNotAuthenticatedException
     if user == 'already':
         raise UserNameAlreadyTakenException
-    return {'name': 'new idk', 'password': 'test123', 'is_teacher': False}
+    return {'name': 'new idk', 'password': 'test123'}
 
 
 @router.delete('/delete', status_code=status.HTTP_204_NO_CONTENT)

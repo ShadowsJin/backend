@@ -9,4 +9,3 @@ class SAuthUser(BaseModel):
 class SEditUser(BaseModel):
     name: str
     password: str
-    is_teacher: bool
