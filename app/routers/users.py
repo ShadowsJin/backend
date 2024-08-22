@@ -33,7 +33,7 @@ def login_user(response: Response, user: SAuthUser):
     response.set_cookie('refresh_token', refresh_token, httponly=True, max_age=240, path='/api/users')
 
 
-@router.post('/refresh_token', status_code=status.HTTP_204_NO_CONTENT)
+@router.get('/refresh_token', status_code=status.HTTP_204_NO_CONTENT)
 def refresh_user_tokens(response: Response, refresh_token: Annotated[str | None, Cookie()] = None):
     if not refresh_token:
         raise UserNotAuthenticatedException
