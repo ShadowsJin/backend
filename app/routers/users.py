@@ -22,7 +22,7 @@ def register_user(response: Response, user: SFullUser):
         raise UserEmailAlreadyTakenException
     access_token = f'access_token_{user.fullname}_{user.password}'
     refresh_token = f'refresh_token_{user.fullname}_{user.password}'
-    response.set_cookie('access_token', access_token, httponly=True, max_age=120)
+    response.set_cookie('access_token', access_token, max_age=120)
     response.set_cookie('refresh_token', refresh_token, httponly=True, max_age=240, path='/api/users')
 
 
@@ -32,7 +32,7 @@ def login_user(response: Response, user: SLoginUser):
         raise UserInvalidCredentialsException
     access_token = f'access_token_{user.email}_{user.password}'
     refresh_token = f'refresh_token_{user.email}_{user.password}'
-    response.set_cookie('access_token', access_token, httponly=True, max_age=120)
+    response.set_cookie('access_token', access_token, max_age=120)
     response.set_cookie('refresh_token', refresh_token, httponly=True, max_age=240, path='/api/users')
 
 
@@ -42,7 +42,7 @@ def refresh_user_tokens(response: Response, refresh_token: Annotated[str | None,
         raise UserNotAuthenticatedException
     access_token = f'new_access_token_{refresh_token[14:]}'
     refresh_token = f'new_refresh_token_{refresh_token[14:]}'
-    response.set_cookie('access_token', access_token, httponly=True, max_age=120)
+    response.set_cookie('access_token', access_token, max_age=120)
     response.set_cookie('refresh_token', refresh_token, httponly=True, max_age=240, path='/api/users')
 
 
