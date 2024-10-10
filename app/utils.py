@@ -51,13 +51,13 @@ def create_tokens_cookie(response: Response, user_id: UUID) -> None:
     response.set_cookie(
         'access_token',
         access_token,
-        max_age=expiration_time['access'].seconds
+        max_age=int(expiration_time['access'].total_seconds())
     )
     response.set_cookie(
         'refresh_token',
         refresh_token,
         httponly=True,
-        max_age=expiration_time['refresh'].seconds,
+        max_age=int(expiration_time['refresh'].total_seconds()),
         path='/api/users'
     )
 
