@@ -21,12 +21,17 @@ class UserEmailAlreadyTakenException(BaseException):
 
 class UserInvalidCredentialsException(BaseException):
     status_code = status.HTTP_401_UNAUTHORIZED
-    detail = 'invalid name or password'
+    detail = 'invalid email or password'
 
 
 class UserNotAuthenticatedException(BaseException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = 'you are not logged in your account'
+
+
+class InvalidTokenException(BaseException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = 'token expired or has invalid signature/format'
 
 
 class QuizOwnerException(BaseException):

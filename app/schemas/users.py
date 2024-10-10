@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from pydantic import BaseModel, EmailStr
 
 
@@ -6,7 +8,19 @@ class SLoginUser(BaseModel):
     password: str
 
 
-class SFullUser(BaseModel):
+class SInfoUser(BaseModel):
+    fullname: str
+    email: EmailStr
+
+
+class SRegisterUser(BaseModel):
+    fullname: str
+    email: EmailStr
+    password: str
+
+
+class SUser(BaseModel):
+    id: UUID
     fullname: str
     email: EmailStr
     password: str
