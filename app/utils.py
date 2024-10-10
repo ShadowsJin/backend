@@ -1,15 +1,15 @@
 from datetime import datetime, timedelta, timezone
-from typing import Literal
+from typing import Literal, Annotated
 from uuid import UUID
 
-from fastapi import Response
-from jose import jwt
+from fastapi import Response, Cookie
+from jose import jwt, JWTError
 from passlib.context import CryptContext
 from pydantic import EmailStr
 
 from app.config import settings
 from app.exceptions import (UserInvalidCredentialsException,
-                            UserNameAlreadyTakenException)
+                            UserNameAlreadyTakenException, InvalidTokenException, UserNotAuthenticatedException)
 from app.repositories.users import UsersRepository
 from app.schemas.users import SUser
 
@@ -67,3 +67,22 @@ async def authenticate_user(email: EmailStr, password: str) -> SUser:
     if not (user and verify_password(password, user.password)):
         raise UserInvalidCredentialsException
     return user
+
+
+def check_token(token: str) -> None:
+    if not token:
+        raise UserNotAuthenticatedException
+    try:
+        jwt.decode(token, settings.SECRET_KEY, settings.ENCODE_ALGORITHM)
+    except JWTError:
+        raise InvalidTokenException
+
+
+def get_access_token(access_token: Annotated[str | None, Cookie()] = None):
+    check_token(access_token)
+    return access_token
+
+
+def get_refresh_token(refresh_token: Annotated[str | None, Cookie()] = None):
+    check_token(refresh_token)
+    return refresh_token
