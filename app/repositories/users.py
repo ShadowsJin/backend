@@ -10,6 +10,10 @@ from app.schemas.users import SInfoUser, SUser
 
 class UsersRepository(AbstractRepository):
     @staticmethod
+    async def find_all(**filter_by):
+        raise NotImplemented
+
+    @staticmethod
     async def find_one_or_none(**filter_by) -> SUser:
         async with async_session_maker() as session:
             query = select(User.__table__.columns).filter_by(**filter_by)

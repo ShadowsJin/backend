@@ -9,6 +9,11 @@ class AbstractRepository(ABC):
 
     @staticmethod
     @abstractmethod
+    async def find_all(**filter_by):
+        pass
+
+    @staticmethod
+    @abstractmethod
     async def create(**values):
         pass
 
