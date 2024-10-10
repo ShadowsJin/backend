@@ -2,14 +2,20 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    # PostgreSQL settings
     POSTGRES_HOST: str
     POSTGRES_PORT: int
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
 
+    # FastAPI settings
     FASTAPI_PORT: int
     FRONTEND_PORT: int
+
+    # JWT settings
+    SECRET_KEY: str
+    ENCODE_ALGORITHM: str
 
     @property
     def POSTGRES_URL(self):
