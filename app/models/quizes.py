@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Optional
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import DateTime, ForeignKey, String, UniqueConstraint
@@ -37,17 +37,7 @@ class Question(UUIDMixin, Base):
     quiz_id: Mapped[UUID] = mapped_column(
         ForeignKey('quizes.id', ondelete='CASCADE')
     )
-    question_type_id: Mapped[UUID] = mapped_column(
-        ForeignKey('question_types.id', ondelete='CASCADE')
-    )
     quiz: Mapped['Quiz'] = relationship(back_populates='questions')
-    question_type: Mapped['QuestionType'] = relationship()
-
-
-class QuestionType(UUIDMixin, Base):
-    __tablename__ = 'question_types'
-
-    name: Mapped[unique_name]
 
 
 class AnswerOption(UUIDMixin, Base):
@@ -60,7 +50,7 @@ class AnswerOption(UUIDMixin, Base):
 class UserAnswer(UUIDMixin, Base):
     __tablename__ = 'user_answers'
 
-    answer: Mapped[dict[str, Any]]
+    answer: Mapped[UUID]
     is_correct: Mapped[bool]
 
     quiz_id: Mapped[UUID] = mapped_column(
@@ -72,8 +62,12 @@ class UserAnswer(UUIDMixin, Base):
     question_id: Mapped[UUID] = mapped_column(
         ForeignKey('questions.id', ondelete='CASCADE')
     )
+    answer_id: Mapped[UUID] = mapped_column(
+        ForeignKey('answer_options.id', ondelete='CASCADE')
+    )
     quiz: Mapped['Quiz'] = relationship()
     user: Mapped['User'] = relationship()
     question: Mapped['Question'] = relationship()
+    answer: Mapped['AnswerOption'] = relationship()
 
     UniqueConstraint("quiz_id", "user_id", "question_id")
