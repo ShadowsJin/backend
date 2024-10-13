@@ -15,7 +15,7 @@ MAX_QUESTION_LENGTH = 500
 class Quiz(UUIDMixin, Base):
     __tablename__ = 'quizes'
 
-    name: Mapped[unique_name]
+    title: Mapped[unique_name]
     description: Mapped[Optional[str]] = mapped_column(String(MAX_QUESTION_LENGTH))
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
