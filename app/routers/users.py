@@ -1,40 +1,14 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Cookie, Depends, Response, status
-from jose import jwt
-from jose.exceptions import JWTError
-
-from app.config import settings
-from app.exceptions import InvalidTokenException, UserNotAuthenticatedException
+from fastapi import APIRouter, Depends, Response, status
 from app.repositories.users import UsersRepository
 from app.schemas.users import SInfoUser, SLoginUser, SRegisterUser
 from app.utils import (authenticate_user, check_fullname_or_email_exists,
                        create_tokens_cookie, get_password_hash,
-                       get_user_id_from_token)
+                       get_user_id_from_token, get_refresh_token, get_access_token)
 
 router = APIRouter(
     prefix='/users',
     tags=['auth']
 )
-
-
-def check_token(token: str) -> None:
-    if not token:
-        raise UserNotAuthenticatedException
-    try:
-        jwt.decode(token, settings.SECRET_KEY, settings.ENCODE_ALGORITHM)
-    except JWTError:
-        raise InvalidTokenException
-
-
-def get_access_token(access_token: Annotated[str | None, Cookie()] = None):
-    check_token(access_token)
-    return access_token
-
-
-def get_refresh_token(refresh_token: Annotated[str | None, Cookie()] = None):
-    check_token(refresh_token)
-    return refresh_token
 
 
 @router.post('/register', status_code=status.HTTP_204_NO_CONTENT)
