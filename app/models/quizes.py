@@ -32,7 +32,7 @@ class Question(UUIDMixin, Base):
     __tablename__ = 'questions'
 
     name: Mapped[str] = mapped_column(String(MAX_QUESTION_LENGTH))
-    sequence_number: Mapped[int] = mapped_column(autoincrement=True)
+    sequence_number: Mapped[int]
 
     quiz_id: Mapped[UUID] = mapped_column(
         ForeignKey('quizes.id', ondelete='CASCADE')
