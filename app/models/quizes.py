@@ -45,6 +45,7 @@ class AnswerOption(UUIDMixin, Base):
     __tablename__ = 'answer_options'
 
     name: Mapped[str] = mapped_column(String(MAX_TEXT_LENGTH))
+    sequence_number: Mapped[int]
     is_correct: Mapped[bool]
 
     question_id: Mapped[UUID] = mapped_column(
@@ -55,7 +56,6 @@ class AnswerOption(UUIDMixin, Base):
 class UserAnswer(UUIDMixin, Base):
     __tablename__ = 'user_answers'
 
-    answer: Mapped[UUID]
     is_correct: Mapped[bool]
 
     quiz_id: Mapped[UUID] = mapped_column(
