@@ -38,6 +38,7 @@ class Question(UUIDMixin, Base):
         ForeignKey('quizes.id', ondelete='CASCADE')
     )
     quiz: Mapped['Quiz'] = relationship(back_populates='questions')
+    answer_options: Mapped[list['AnswerOption']] = relationship()
 
 
 class AnswerOption(UUIDMixin, Base):
@@ -45,6 +46,10 @@ class AnswerOption(UUIDMixin, Base):
 
     name: Mapped[str] = mapped_column(String(MAX_TEXT_LENGTH))
     is_correct: Mapped[bool]
+
+    question_id: Mapped[UUID] = mapped_column(
+        ForeignKey('questions.id', ondelete='CASCADE')
+    )
 
 
 class UserAnswer(UUIDMixin, Base):
