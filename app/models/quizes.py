@@ -56,7 +56,7 @@ class AnswerOption(UUIDMixin, Base):
 class UserAnswer(UUIDMixin, Base):
     __tablename__ = 'user_answers'
 
-    is_correct: Mapped[bool]
+    is_correct: Mapped[bool] = mapped_column(default=False)
 
     quiz_id: Mapped[UUID] = mapped_column(
         ForeignKey('quizes.id', ondelete='CASCADE')
