@@ -39,9 +39,19 @@ class QuizOwnerException(BaseException):
     detail = 'you are not owner of this quiz'
 
 
+class QuizTitleAlreadyTakenException(BaseException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = 'this quiz title is already taken'
+
+
 class QuizNotFoundException(BaseException):
     status_code = status.HTTP_404_NOT_FOUND
     detail = 'quiz with this id not found'
+
+
+class QuestionNotFoundException(BaseException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = 'question with this id not found'
 
 
 class AnswerNotFoundException(BaseException):

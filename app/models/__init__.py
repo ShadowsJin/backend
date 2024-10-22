@@ -1,2 +1,2 @@
-from .quizes import AnswerOption, Question, QuestionType, Quiz, UserAnswer
+from .quizes import AnswerOption, Question, Quiz, UserAnswer
 from .users import User

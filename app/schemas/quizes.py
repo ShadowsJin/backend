@@ -1,6 +1,8 @@
-from typing import Optional
+from datetime import datetime
+from typing import Annotated, Optional
+from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class SAnswerOption(BaseModel):
@@ -8,13 +10,49 @@ class SAnswerOption(BaseModel):
     is_correct: bool
 
 
+class SInfoAnswerOption(BaseModel):
+    id: UUID
+    name: str
+    is_correct: bool
+
+
 class SQuestion(BaseModel):
     name: str
-    type: int
-    answers: Optional[list[SAnswerOption]]
+    answers: list[SAnswerOption]
+
+
+class SInfoQuestion(BaseModel):
+    id: UUID
+    name: str
+    answers: list[SInfoAnswerOption]
+
+
+class SFullInfoQuestion(BaseModel):
+    id: UUID
+    name: str
+    user_answer: UUID
+    answers: list[SInfoAnswerOption]
 
 
 class SQuiz(BaseModel):
-    name: str
-    description: Optional[str]
+    title: str
+    description: Annotated[Optional[str], Field(default='')]
     questions: list[SQuestion]
+
+
+class SInfoQuiz(BaseModel):
+    id: UUID
+    owner_id: UUID
+    title: str
+    description: Annotated[Optional[str], Field(default='')]
+    created_at: datetime
+    questions_count: int
+
+
+class SUserAnswer(BaseModel):
+    id: UUID
+    quiz_id: UUID
+    user_id: UUID
+    question_id: UUID
+    answer_id: UUID
+    is_correct: bool
