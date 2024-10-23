@@ -139,7 +139,7 @@ async def get_quiz_question(quiz_id: UUID, question_no: int, access_token: str =
         user_id=user_id
     )
     return SFullInfoQuestion(
-        user_answer=user_answer.answer_id,
+        user_answer=user_answer.answer_id if user_answer else None,
         **question.model_dump()
     )
 

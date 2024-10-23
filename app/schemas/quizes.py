@@ -30,7 +30,7 @@ class SInfoQuestion(BaseModel):
 class SFullInfoQuestion(BaseModel):
     id: UUID
     name: str
-    user_answer: UUID
+    user_answer: UUID | None
     answers: list[SInfoAnswerOption]
 
 
