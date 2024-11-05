@@ -16,8 +16,16 @@ class SInfoAnswerOption(BaseModel):
     is_correct: bool
 
 
+class SFullInfoAnswerOption(BaseModel):
+    id: UUID
+    name: str
+    is_correct: bool
+    is_selected: bool
+
+
 class SQuestion(BaseModel):
     name: str
+    type: str
     answers: list[SAnswerOption]
 
 
@@ -30,8 +38,8 @@ class SInfoQuestion(BaseModel):
 class SFullInfoQuestion(BaseModel):
     id: UUID
     name: str
-    user_answer: UUID | None
-    answers: list[SInfoAnswerOption]
+    # user_answer: UUID | None
+    answers: list[SFullInfoAnswerOption]
 
 
 class SQuiz(BaseModel):

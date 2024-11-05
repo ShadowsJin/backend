@@ -1,13 +1,13 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Query
 
 from app.exceptions import (QuestionNotFoundException, QuizNotFoundException,
                             QuizOwnerException, QuizTitleAlreadyTakenException)
 from app.repositories.answers import AnswersRepository
 from app.repositories.questions import QuestionsRepository
 from app.repositories.quizes import QuizesRepository
-from app.schemas.quizes import SQuiz, SFullInfoQuestion
+from app.schemas.quizes import SQuiz, SFullInfoQuestion, SInfoQuestion, SFullInfoAnswerOption
 from app.utils import get_access_token, get_user_id_from_token
 
 router = APIRouter(
@@ -67,7 +67,12 @@ async def get_quiz_questions(quiz_id: UUID, access_token: str = Depends(get_acce
 
 
 @router.post('/send_answer/{quiz_id}/{question_no}', status_code=status.HTTP_204_NO_CONTENT)
-async def send_answer(quiz_id: UUID, question_no: int, answer: UUID, access_token: str = Depends(get_access_token)):
+async def send_answer(
+        quiz_id: UUID,
+        question_no: int,
+        answer: list[UUID] = Query(),
+        access_token: str = Depends(get_access_token)
+):
     user_id = get_user_id_from_token(access_token)
     quiz = await QuizesRepository.find_one_or_none(id=quiz_id)
     if not quiz:
@@ -75,22 +80,17 @@ async def send_answer(quiz_id: UUID, question_no: int, answer: UUID, access_toke
     question = await QuestionsRepository.find_one_or_none(quiz_id=quiz_id, sequence_number=question_no)
     if not question:
         raise QuestionNotFoundException
-    user_answer = await AnswersRepository.find_one_or_none(
+    await AnswersRepository.delete(
         quiz_id=quiz_id,
         question_id=question.id,
         user_id=user_id
     )
-    if user_answer:
-        await AnswersRepository.update(
-            id=user_answer.id,
-            answer_id=answer
-        )
-    else:
+    for ans in answer:
         await AnswersRepository.create(
             quiz_id=quiz_id,
             question_id=question.id,
             user_id=user_id,
-            answer_id=answer
+            answer_id=ans
         )
 
 
@@ -133,14 +133,21 @@ async def get_quiz_question(quiz_id: UUID, question_no: int, access_token: str =
     question = await QuestionsRepository.find_one_or_none(quiz_id=quiz_id, sequence_number=question_no)
     if not question:
         raise QuestionNotFoundException
-    user_answer = await AnswersRepository.find_one_or_none(
+    user_answer = await AnswersRepository.find_all(
         quiz_id=quiz_id,
         question_id=question.id,
         user_id=user_id
     )
+    user_answer_ids = [answer.answer_id for answer in user_answer]
     return SFullInfoQuestion(
-        user_answer=user_answer.answer_id if user_answer else None,
-        **question.model_dump()
+        id=question.id,
+        name=question.name,
+        answers=[
+            SFullInfoAnswerOption(
+                is_selected=(answer.id in user_answer_ids),
+                **answer.model_dump()
+            ) for answer in question.answers
+        ]
     )
 
 
