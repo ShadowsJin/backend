@@ -43,6 +43,7 @@ async def create_quiz(quiz: SQuiz, access_token: str = Depends(get_access_token)
         await QuestionsRepository.create(
             name=question.name,
             sequence_number=number,
+            type=question.type,
             quiz_id=quiz_id,
             answers=question.answers
         )
