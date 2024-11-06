@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import insert, select, update
+from sqlalchemy import insert, select, update, delete
 
 from app.database import async_session_maker
 from app.models import AnswerOption, UserAnswer
@@ -41,4 +41,7 @@ class AnswersRepository(AbstractRepository):
 
     @staticmethod
     async def delete(**filter_by) -> None:
-        raise NotImplementedError
+        async with async_session_maker() as session:
+            query = delete(UserAnswer).filter_by(**filter_by)
+            await session.execute(query)
+            await session.commit()
