@@ -41,4 +41,4 @@ class AnswersRepository(AbstractRepository):
 
     @staticmethod
     async def delete(**filter_by) -> None:
-        raise NotImplemented
+        raise NotImplementedError

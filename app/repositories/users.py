@@ -11,7 +11,7 @@ from app.schemas.users import SInfoUser, SUser
 class UsersRepository(AbstractRepository):
     @staticmethod
     async def find_all(**filter_by):
-        raise NotImplemented
+        raise NotImplementedError
 
     @staticmethod
     async def find_one_or_none(**filter_by) -> SUser:
