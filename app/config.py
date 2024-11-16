@@ -9,6 +9,16 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
 
+    # ClickHouse settings
+    CLICKHOUSE_HOST: str
+    CLICKHOUSE_PORT: int
+    CLICKHOUSE_DB: str
+    CLICKHOUSE_USER: str
+    CLICKHOUSE_PASSWORD: str
+
+    # Grafana settings
+    GF_INSTALL_PLUGINS: str
+
     # FastAPI settings
     FASTAPI_PORT: int
     FRONTEND_PORT: int

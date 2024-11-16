@@ -10,6 +10,18 @@ services:
       timeout: 1s
       retries: 60
     restart: always
+  clickhouse:
+    image: 'clickhouse/clickhouse-server:24'
+    env_file: .env
+    ports:
+      - "8123:8123"
+  grafana:
+    image: 'grafana/grafana-oss:11.3.0'
+    env_file: .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
   backend:
     build: .
     env_file: .env
@@ -20,3 +32,6 @@ services:
       postgres:
         condition: service_healthy
     restart: always
+
+volumes:
+  grafana-storage:

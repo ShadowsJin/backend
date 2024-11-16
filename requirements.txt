@@ -1,6 +1,7 @@
 alembic==1.13.2
 asyncpg==0.29.0
 bcrypt==4.2.0
+clickhouse-connect==0.8.6
 fastapi==0.111.1
 greenlet==3.0.3
 gunicorn==22.0.0
