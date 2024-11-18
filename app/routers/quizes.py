@@ -26,7 +26,8 @@ async def get_created_quizes(access_token: str = Depends(get_access_token)):
 async def get_completed_quizes(access_token: str = Depends(get_access_token)):
     user_id = get_user_id_from_token(access_token)
     completed_quizes = await AnswersRepository.find_all(user_id=user_id)
-    return [await QuizesRepository.find_one_or_none(id=quiz.quiz_id) for quiz in completed_quizes]
+    quizes_ids = set(quiz.quiz_id for quiz in completed_quizes)
+    return [await QuizesRepository.find_one_or_none(id=quiz_id) for quiz_id in quizes_ids]
 
 
 @router.post('/new', status_code=status.HTTP_201_CREATED)
