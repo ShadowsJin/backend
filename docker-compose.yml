@@ -9,12 +9,22 @@ services:
       interval: 1s
       timeout: 1s
       retries: 60
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
     restart: always
   clickhouse:
     image: 'clickhouse/clickhouse-server:24'
     env_file: .env
     ports:
       - "8123:8123"
+    healthcheck:
+      test: wget --no-verbose --tries=1 http://localhost:${CLICKHOUSE_PORT}/ping || exit 1
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    volumes:
+      - clickhouse-storage:/var/lib/clickhouse
+    restart: always
   grafana:
     image: 'grafana/grafana-oss:11.3.0'
     env_file: .env
@@ -22,6 +32,7 @@ services:
       - "3000:3000"
     volumes:
       - grafana-storage:/var/lib/grafana
+    restart: always
   backend:
     build: .
     env_file: .env
@@ -31,7 +42,11 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      clickhouse:
+        condition: service_healthy
     restart: always
 
 volumes:
+  postgres-storage:
+  clickhouse-storage:
   grafana-storage:
