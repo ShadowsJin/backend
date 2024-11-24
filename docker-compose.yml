@@ -25,6 +25,13 @@ services:
     volumes:
       - clickhouse-storage:/var/lib/clickhouse
     restart: always
+  prometheus:
+    image: 'prom/prometheus:v2.55.1'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
   grafana:
     image: 'grafana/grafana-oss:11.3.0'
     env_file: .env
