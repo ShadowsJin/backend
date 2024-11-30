@@ -18,9 +18,9 @@ services:
     ports:
       - "8123:8123"
     healthcheck:
-      test: wget --no-verbose --tries=1 http://localhost:${CLICKHOUSE_PORT}/ping || exit 1
+      test: wget --no-verbose --tries=1 http://localhost:${CLICKHOUSE_PORT}/ping || exit 1; sleep 4
       interval: 1s
-      timeout: 1s
+      timeout: 5s
       retries: 60
     volumes:
       - clickhouse-storage:/var/lib/clickhouse
