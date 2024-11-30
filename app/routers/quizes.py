@@ -7,7 +7,7 @@ from app.exceptions import (QuestionNotFoundException, QuizNotFoundException,
 from app.repositories.answers import AnswersRepository
 from app.repositories.questions import QuestionsRepository
 from app.repositories.quizes import QuizesRepository
-from app.schemas.quizes import SQuiz, SFullInfoQuestion, SInfoQuestion, SFullInfoAnswerOption
+from app.schemas.quizes import SQuiz, SFullInfoQuestion, SInfoQuestion, SFullInfoAnswerOption, SCompletedQuiz
 from app.utils import get_access_token, get_user_id_from_token
 
 router = APIRouter(
@@ -27,7 +27,16 @@ async def get_completed_quizes(access_token: str = Depends(get_access_token)):
     user_id = get_user_id_from_token(access_token)
     completed_quizes = await AnswersRepository.find_all(user_id=user_id)
     quizes_ids = set(quiz.quiz_id for quiz in completed_quizes)
-    return [await QuizesRepository.find_one_or_none(id=quiz_id) for quiz_id in quizes_ids]
+    quizes = []
+    for quiz_id in quizes_ids:
+        quiz_info = await QuizesRepository.find_one_or_none(id=quiz_id)
+        quiz_answers = await AnswersRepository.find_all(
+            quiz_id=quiz_id,
+            user_id=user_id,
+            is_correct=True
+        )
+        quizes.append(SCompletedQuiz(correct_questions=len(quiz_answers), **quiz_info.model_dump()))
+    return quizes
 
 
 @router.post('/new', status_code=status.HTTP_201_CREATED)

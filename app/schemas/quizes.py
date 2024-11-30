@@ -57,6 +57,16 @@ class SInfoQuiz(BaseModel):
     questions_count: int
 
 
+class SCompletedQuiz(BaseModel):
+    id: UUID
+    owner_id: UUID
+    title: str
+    description: Annotated[Optional[str], Field(default='')]
+    created_at: datetime
+    correct_questions: int
+    questions_count: int
+
+
 class SUserAnswer(BaseModel):
     id: UUID
     quiz_id: UUID
