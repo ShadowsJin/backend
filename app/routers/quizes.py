@@ -71,6 +71,12 @@ async def get_quiz(quiz_id: UUID, access_token: str = Depends(get_access_token))
     return SInfoQuizWithOwner(owner_name=user.fullname, **quiz.model_dump())
 
 
+@router.get('/{quiz_id}/stats', status_code=status.HTTP_200_OK)
+async def get_quiz(quiz_id: UUID, access_token: str = Depends(get_access_token)):
+    user_answers = await AnswersRepository.find_all(quiz_id=quiz_id)
+    return 0
+
+
 @router.get('/{quiz_id}/questions', status_code=status.HTTP_200_OK)
 async def get_quiz_questions(quiz_id: UUID, access_token: str = Depends(get_access_token)):
     user_id = get_user_id_from_token(access_token)
@@ -85,21 +91,6 @@ async def get_quiz_questions(quiz_id: UUID, access_token: str = Depends(get_acce
             user_id=user_id
         )
         questions[index] = SInfoQuestionV2(is_answered=bool(user_answers), **question.model_dump())
-    return questions
-
-    completed_quizes = await AnswersRepository.find_all(user_id=user_id)
-    quizes_ids = set(quiz.quiz_id for quiz in completed_quizes)
-    quizes = []
-    for quiz_id in quizes_ids:
-        quiz_info = await QuizesRepository.find_one_or_none(id=quiz_id)
-        quiz_answers = await AnswersRepository.find_all(
-            quiz_id=quiz_id,
-            user_id=user_id,
-            is_correct=True
-        )
-        quizes.append(SCompletedQuiz(correct_questions=len(quiz_answers), **quiz_info.model_dump()))
-    return quizes
-    # is_answered у каждого вопроса
     return questions
 
 
