@@ -63,6 +63,16 @@ class SInfoQuiz(BaseModel):
     questions_count: int
 
 
+class SInfoQuizWithOwner(BaseModel):
+    id: UUID
+    owner_id: UUID
+    owner_name: str
+    title: str
+    description: Annotated[Optional[str], Field(default='')]
+    created_at: datetime
+    questions_count: int
+
+
 class SCompletedQuiz(BaseModel):
     id: UUID
     owner_id: UUID

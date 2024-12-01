@@ -7,8 +7,9 @@ from app.exceptions import (QuestionNotFoundException, QuizNotFoundException,
 from app.repositories.answers import AnswersRepository
 from app.repositories.questions import QuestionsRepository
 from app.repositories.quizes import QuizesRepository
+from app.repositories.users import UsersRepository
 from app.schemas.quizes import SQuiz, SFullInfoQuestion, SInfoQuestion, SFullInfoAnswerOption, SCompletedQuiz, \
-    SInfoQuestionV2
+    SInfoQuestionV2, SInfoQuizWithOwner
 from app.utils import get_access_token, get_user_id_from_token
 
 router = APIRouter(
@@ -66,7 +67,8 @@ async def get_quiz(quiz_id: UUID, access_token: str = Depends(get_access_token))
     quiz = await QuizesRepository.find_one_or_none(id=quiz_id)
     if not quiz:
         raise QuizNotFoundException
-    return quiz
+    user = await UsersRepository.find_one_or_none(id=get_user_id_from_token(access_token))
+    return SInfoQuizWithOwner(owner_name=user.fullname, **quiz.model_dump())
 
 
 @router.get('/{quiz_id}/questions', status_code=status.HTTP_200_OK)
