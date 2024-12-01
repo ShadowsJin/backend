@@ -83,6 +83,13 @@ class SCompletedQuiz(BaseModel):
     questions_count: int
 
 
+class SQuizStats(BaseModel):
+    user_id: UUID
+    user_name: str
+    correct_count: int
+    total_count: int
+
+
 class SUserAnswer(BaseModel):
     id: UUID
     quiz_id: UUID

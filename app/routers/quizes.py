@@ -9,7 +9,7 @@ from app.repositories.questions import QuestionsRepository
 from app.repositories.quizes import QuizesRepository
 from app.repositories.users import UsersRepository
 from app.schemas.quizes import SQuiz, SFullInfoQuestion, SInfoQuestion, SFullInfoAnswerOption, SCompletedQuiz, \
-    SInfoQuestionV2, SInfoQuizWithOwner
+    SInfoQuestionV2, SInfoQuizWithOwner, SQuizStats
 from app.utils import get_access_token, get_user_id_from_token
 
 router = APIRouter(
@@ -73,8 +73,24 @@ async def get_quiz(quiz_id: UUID, access_token: str = Depends(get_access_token))
 
 @router.get('/{quiz_id}/stats', status_code=status.HTTP_200_OK)
 async def get_quiz(quiz_id: UUID, access_token: str = Depends(get_access_token)):
+    quiz = await QuizesRepository.find_one_or_none(id=quiz_id)
     user_answers = await AnswersRepository.find_all(quiz_id=quiz_id)
-    return 0
+    users_ids = set(quiz.user_id for quiz in user_answers)
+    stats = []
+    for user_id in users_ids:
+        user = await UsersRepository.find_one_or_none(id=user_id)
+        correct_answers = await AnswersRepository.find_all(
+            quiz_id=quiz_id,
+            user_id=user_id,
+            is_correct=True
+        )
+        stats.append(SQuizStats(
+            user_id=user_id,
+            user_name=user.fullname,
+            correct_count=len(correct_answers),
+            total_count=quiz.questions_count
+        ))
+    return stats
 
 
 @router.get('/{quiz_id}/questions', status_code=status.HTTP_200_OK)
