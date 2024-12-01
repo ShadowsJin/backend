@@ -35,6 +35,12 @@ class SInfoQuestion(BaseModel):
     answers: list[SInfoAnswerOption]
 
 
+class SInfoQuestionV2(BaseModel):
+    id: UUID
+    name: str
+    answers: list[SInfoAnswerOption]
+    is_answered: bool
+
 class SFullInfoQuestion(BaseModel):
     id: UUID
     name: str
