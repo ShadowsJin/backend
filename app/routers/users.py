@@ -36,8 +36,8 @@ def refresh_user_tokens(response: Response, refresh_token: str = Depends(get_ref
 
 @router.get('/logout', status_code=status.HTTP_204_NO_CONTENT)
 def logout_user(response: Response, refresh_token: str = Depends(get_refresh_token)):
-    response.delete_cookie('access_token')
-    response.delete_cookie('refresh_token')
+    response.delete_cookie('access_token', path='/')
+    response.delete_cookie('refresh_token', path='/api/users')
 
 
 @router.get('/me', status_code=status.HTTP_200_OK)
