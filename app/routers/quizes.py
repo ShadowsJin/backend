@@ -114,7 +114,7 @@ async def get_quiz_questions(quiz_id: UUID, access_token: str = Depends(get_acce
 async def send_answer(
         quiz_id: UUID,
         question_no: int,
-        answer: list[UUID] = Query(),
+        answer: list[UUID] = Query([]),
         access_token: str = Depends(get_access_token)
 ):
     user_id = get_user_id_from_token(access_token)
