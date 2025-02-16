@@ -19,7 +19,6 @@ class SInfoAnswerOption(BaseModel):
 class SFullInfoAnswerOption(BaseModel):
     id: UUID
     name: str
-    is_correct: bool
     is_selected: bool
 
 
