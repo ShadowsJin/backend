@@ -22,7 +22,7 @@ class ClickHouseHandler(logging.Handler):
         client.command('DROP TABLE IF EXISTS logs_fastapi')
         # location = file and line
         client.command('''
-                CREATE TABLE logs_fastapi (
+                CREATE TABLE IF NOT EXISTS logs_fastapi (
                     timestamp DateTime,
                     level String,
                     service String,

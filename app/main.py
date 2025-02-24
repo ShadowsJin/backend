@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.config import settings
-from app.logger import logger
+# from app.logger import logger
 from app.routers.quizes import router as quizes_router
 from app.routers.users import router as users_router
 
@@ -32,13 +32,13 @@ instrumentator = Instrumentator(
 ).instrument(app, latency_lowr_buckets=(0.1, 0.25, 0.5, 0.75, 1))
 
 
-@app.middleware('http')
-async def logging(request: Request, call_next):
-    try:
-        return await call_next(request)
-    except Exception as exc:
-        logger.error(exc.message, extra={'endpoint': f'{request.method} {request.url.path}'})
-        return Response(content='Internal Server Error', status_code=500)
+# @app.middleware('http')
+# async def logging(request: Request, call_next):
+#     try:
+#         return await call_next(request)
+#     except Exception as exc:
+#         logger.error(exc.message, extra={'endpoint': f'{request.method} {request.url.path}'})
+#         return Response(content='Internal Server Error', status_code=500)
 
 
 for router in [users_router, quizes_router]:
