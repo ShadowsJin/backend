@@ -106,7 +106,19 @@ async def get_quiz_questions(quiz_id: UUID, access_token: str = Depends(get_acce
             question_id=question.id,
             user_id=user_id
         )
-        questions[index] = SFullInfoQuestionV2(is_answered=bool(user_answers), **question.model_dump())
+        questions[index] = SFullInfoQuestionV2(
+            id=question.id,
+            name=question.name,
+            is_answered=bool(user_answers),
+            answers=[
+                SFullInfoAnswerOption(
+                    id=answer.id,
+                    name=answer.name,
+                    is_selected=(answer.id in [user_answer.id for user_answer in user_answers])
+                )
+                for answer in question.answers
+            ]
+        )
     return questions
 
 
