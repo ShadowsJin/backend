@@ -9,7 +9,7 @@ from app.repositories.questions import QuestionsRepository
 from app.repositories.quizes import QuizesRepository
 from app.repositories.users import UsersRepository
 from app.schemas.quizes import SQuiz, SFullInfoQuestion, SInfoQuestion, SFullInfoAnswerOption, SCompletedQuiz, \
-    SInfoQuestionV2, SInfoQuizWithOwner, SQuizStats
+    SInfoQuestionV2, SInfoQuizWithOwner, SQuizStats, SFullInfoQuestionV2
 from app.utils import get_access_token, get_user_id_from_token
 
 router = APIRouter(
@@ -106,7 +106,7 @@ async def get_quiz_questions(quiz_id: UUID, access_token: str = Depends(get_acce
             question_id=question.id,
             user_id=user_id
         )
-        questions[index] = SInfoQuestionV2(is_answered=bool(user_answers), **question.model_dump())
+        questions[index] = SFullInfoQuestionV2(is_answered=bool(user_answers), **question.model_dump())
     return questions
 
 

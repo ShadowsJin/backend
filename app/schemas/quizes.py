@@ -40,11 +40,19 @@ class SInfoQuestionV2(BaseModel):
     answers: list[SInfoAnswerOption]
     is_answered: bool
 
+
 class SFullInfoQuestion(BaseModel):
     id: UUID
     name: str
     # user_answer: UUID | None
     answers: list[SFullInfoAnswerOption]
+
+
+class SFullInfoQuestionV2(BaseModel):
+    id: UUID
+    name: str
+    answers: list[SFullInfoAnswerOption]
+    is_answered: bool
 
 
 class SQuiz(BaseModel):
